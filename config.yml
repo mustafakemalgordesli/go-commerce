@@ -1,0 +1,16 @@
+database:
+  driver: "postgres"
+  dbname: "go-commerce"
+  username: "postgres"
+  password: "postgres"
+  host: "localhost"
+  port: "5432"
+  logmode: true
+
+server:
+  host: "localhost"
+  port: "3333"
+  secret: "mySecretKey"
+  accessTokenExpireDuration: 1
+  refreshTokenExpireDuration: 1
+  limitCountPerRequest: 1

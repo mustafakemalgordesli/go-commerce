@@ -1,1 +1,1 @@
-# go-ecommerce
+# go-commerce
