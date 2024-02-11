@@ -1,8 +1,10 @@
 package config
 
 type ServerConfiguration struct {
+	Host                       string
 	Port                       string
-	Secret                     string
+	AccessTokenSecret          string
+	RefreshTokenSecret         string
 	AccessTokenExpireDuration  int
 	RefreshTokenExpireDuration int
 	LimitCountPerRequest       float64

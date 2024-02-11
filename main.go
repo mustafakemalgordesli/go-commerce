@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+
 	if err := config.Setup(); err != nil {
 		log.Fatalf("config.Setup() error: %s", err)
 	}

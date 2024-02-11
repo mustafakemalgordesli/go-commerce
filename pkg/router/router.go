@@ -1,9 +1,12 @@
 package router
 
 import (
+	"fmt"
+
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/mustafakemalgordesli/go-commerce/controllers"
+	"github.com/mustafakemalgordesli/go-commerce/pkg/middlewares"
 	"gorm.io/gorm"
 )
 
@@ -14,12 +17,11 @@ func Setup(db *gorm.DB) *gin.Engine {
 	r.Use(gin.Recovery())
 	r.Use(gzip.Gzip(gzip.DefaultCompression))
 
-	r.GET("/", func(c *gin.Context) {
+	r.GET("/", middlewares.VerifyJWT(), func(c *gin.Context) {
 		responseData := gin.H{
 			"success": true,
 			"message": "Hello World!",
 		}
-
 		c.JSON(200, responseData)
 	})
 
@@ -31,7 +33,10 @@ func Setup(db *gorm.DB) *gin.Engine {
 			responseData := gin.H{
 				"success": true,
 				"message": "Hello World!",
+				"ultime":  "Ultime",
 			}
+
+			fmt.Println("Burada")
 
 			c.JSON(200, responseData)
 		})

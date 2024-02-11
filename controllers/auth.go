@@ -10,6 +10,7 @@ import (
 	"github.com/mustafakemalgordesli/go-commerce/controllers/request"
 	"github.com/mustafakemalgordesli/go-commerce/controllers/response"
 	"github.com/mustafakemalgordesli/go-commerce/models"
+	"github.com/mustafakemalgordesli/go-commerce/pkg/helpers"
 	"gorm.io/gorm"
 )
 
@@ -23,6 +24,11 @@ func NewAuthController(db *gorm.DB) *AuthController {
 	return &AuthController{
 		db: db,
 	}
+}
+
+type Tokens struct {
+	AccessToken  string `json:"accesstoken"`
+	RefreshToken string `json:"refreshtoken"`
 }
 
 func (authController *AuthController) SignUp(c *gin.Context) {
@@ -69,10 +75,20 @@ func (authController *AuthController) SignUp(c *gin.Context) {
 		return
 	}
 
+	accessToken, err := helpers.GenerateAccessToken(user.Id)
+	refreshToken, err := helpers.GenerateRefreshToken(user.Id)
+
+	var authResponse response.AuthResponse
+
+	authResponse = authResponse.ToModel(user)
+
 	responseData := gin.H{
-		"data":    response.ToModel(user),
+		"data": authResponse,
+		"tokens": map[string]string{
+			"accessToken":  accessToken,
+			"refreshToken": refreshToken,
+		},
 		"success": true,
-		"message": "Hello World!",
 	}
 
 	c.JSON(200, responseData)

@@ -10,7 +10,8 @@ database:
 server:
   host: "localhost"
   port: "3333"
-  secret: "mySecretKey"
+  accessTokenSecret: "mySecretKey"
+  refreshTokenSecret: "mySecretKey"
   accessTokenExpireDuration: 1
-  refreshTokenExpireDuration: 1
+  refreshTokenExpireDuration: 720
   limitCountPerRequest: 1
