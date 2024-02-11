@@ -29,8 +29,7 @@ func GenerateRefreshToken(userId int) (string, error) {
 
 func generateToken(userId int, key []byte, expDuration int) (string, error) {
 
-	expirationTime := time.Now().Add(time.Duration(expDuration) * time.Minute)
-	//expirationTime := time.Now().Add(time.Duration(expDuration*60) * time.Minute)
+	expirationTime := time.Now().Add(time.Duration(expDuration*60) * time.Minute)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":        userId,

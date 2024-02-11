@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -38,15 +39,23 @@ func VerifyJWT() gin.HandlerFunc {
 			return
 		}
 
-		if claims, ok := token.Claims.(jwt.MapClaims); ok {
-			expiresAt := int(claims["ExpiresAt"].(float64))
-			fmt.Println(expiresAt)
-			id := claims["id"].(int)
-			c.Set("userId", id)
-		} else {
-			fmt.Println("Err:", err)
+		claims, ok := token.Claims.(jwt.MapClaims)
+
+		if !ok {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"success": false})
+			return
 		}
 
+		expiresAt := int(claims["ExpiresAt"].(float64))
+
+		fmt.Println(int(time.Now().Unix()))
+		if expiresAt < int(time.Now().Unix()) {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"success": false})
+			return
+		}
+
+		id := int(claims["id"].(float64))
+		c.Set("userId", id)
 		c.Next()
 	}
 }
