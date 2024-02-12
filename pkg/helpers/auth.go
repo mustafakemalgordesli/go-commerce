@@ -5,6 +5,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/mustafakemalgordesli/go-commerce/config"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func GenerateAccessToken(userId int) (string, error) {
@@ -43,4 +44,9 @@ func generateToken(userId int, key []byte, expDuration int) (string, error) {
 	}
 
 	return tokenString, nil
+}
+
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }

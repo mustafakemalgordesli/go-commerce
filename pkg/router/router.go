@@ -1,8 +1,6 @@
 package router
 
 import (
-	"fmt"
-
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/mustafakemalgordesli/go-commerce/controllers"
@@ -29,17 +27,7 @@ func Setup(db *gorm.DB) *gin.Engine {
 	authRouter := r.Group("/auth")
 	{
 		authRouter.POST("/signup", authController.SignUp)
-		authRouter.POST("/signin", func(c *gin.Context) {
-			responseData := gin.H{
-				"success": true,
-				"message": "Hello World!",
-				"ultime":  "Ultime",
-			}
-
-			fmt.Println("Burada")
-
-			c.JSON(200, responseData)
-		})
+		authRouter.POST("/signin", authController.SignIn)
 		// authRouter.POST("/refresh", api.RefreshToken)
 		// authRouter.POST("/check", api.CheckToken)
 	}

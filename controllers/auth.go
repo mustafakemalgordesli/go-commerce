@@ -12,6 +12,7 @@ import (
 	"github.com/mustafakemalgordesli/go-commerce/models"
 	"github.com/mustafakemalgordesli/go-commerce/pkg/events"
 	"github.com/mustafakemalgordesli/go-commerce/pkg/helpers"
+	"github.com/mustafakemalgordesli/go-commerce/services"
 	"gorm.io/gorm"
 )
 
@@ -80,8 +81,60 @@ func (authController *AuthController) SignUp(c *gin.Context) {
 		events.PublishMail(user.Email)
 	}()
 
-	accessToken, err := helpers.GenerateAccessToken(user.Id)
-	refreshToken, err := helpers.GenerateRefreshToken(user.Id)
+	accessToken, _ := helpers.GenerateAccessToken(user.Id)
+	refreshToken, _ := helpers.GenerateRefreshToken(user.Id)
+
+	var authResponse response.AuthResponse
+
+	authResponse = authResponse.ToModel(user)
+
+	responseData := gin.H{
+		"data": authResponse,
+		"tokens": map[string]string{
+			"accessToken":  accessToken,
+			"refreshToken": refreshToken,
+		},
+		"success": true,
+	}
+
+	c.JSON(200, responseData)
+}
+
+func (authController *AuthController) SignIn(c *gin.Context) {
+	var _, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var loginRequest request.LoginRequest
+
+	if err := c.BindJSON(&loginRequest); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "success": false})
+		return
+	}
+
+	if validationErr := validate.Struct(loginRequest); validationErr != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": validationErr.Error()})
+		return
+	}
+
+	user, dbErr := services.GetUserByEmail(authController.db, loginRequest.Email)
+
+	if dbErr != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": dbErr})
+		return
+	}
+
+	if controlPasswordResult := helpers.CheckPasswordHash(loginRequest.Password, user.Password); !controlPasswordResult {
+		c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": "Password invalid"})
+		return
+	}
+
+	accessToken, errAccess := helpers.GenerateAccessToken(user.Id)
+	refreshToken, errRefresh := helpers.GenerateRefreshToken(user.Id)
+
+	if errAccess != nil || errRefresh != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"success": false})
+		return
+	}
 
 	var authResponse response.AuthResponse
 
