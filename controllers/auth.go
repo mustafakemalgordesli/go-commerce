@@ -10,6 +10,7 @@ import (
 	"github.com/mustafakemalgordesli/go-commerce/controllers/request"
 	"github.com/mustafakemalgordesli/go-commerce/controllers/response"
 	"github.com/mustafakemalgordesli/go-commerce/models"
+	"github.com/mustafakemalgordesli/go-commerce/pkg/events"
 	"github.com/mustafakemalgordesli/go-commerce/pkg/helpers"
 	"gorm.io/gorm"
 )
@@ -74,6 +75,10 @@ func (authController *AuthController) SignUp(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"success": false, "message": err.Error()})
 		return
 	}
+
+	go func() {
+		events.PublishMail(user.Email)
+	}()
 
 	accessToken, err := helpers.GenerateAccessToken(user.Id)
 	refreshToken, err := helpers.GenerateRefreshToken(user.Id)

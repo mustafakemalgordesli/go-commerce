@@ -7,6 +7,10 @@ database:
   port: "5432"
   logmode: true
 
+rabbitmq:
+  connection: "amqp://guest:guest@localhost:49154/"
+  mailVerifiedQueue: "mail-verified-queue"
+
 server:
   host: "localhost"
   port: "3333"

@@ -11,6 +11,7 @@ var Config *Configuration
 type Configuration struct {
 	Server   ServerConfiguration
 	Database DatabaseConfiguration
+	RabbitMq RabbitMqConfiguration
 }
 
 // Setup initialize configuration

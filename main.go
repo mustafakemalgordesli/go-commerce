@@ -6,6 +6,8 @@ import (
 
 	"github.com/mustafakemalgordesli/go-commerce/config"
 	"github.com/mustafakemalgordesli/go-commerce/pkg/database"
+	"github.com/mustafakemalgordesli/go-commerce/pkg/events"
+	"github.com/mustafakemalgordesli/go-commerce/pkg/rabbitmq"
 	"github.com/mustafakemalgordesli/go-commerce/pkg/router"
 	"github.com/spf13/viper"
 )
@@ -21,8 +23,15 @@ func main() {
 		fmt.Println("database" + err.Error())
 	}
 
+	if err := rabbitmq.Setup(); err != nil {
+		log.Fatalf("rabbitmq.Setup() error: %s", err)
+		fmt.Println("rabbitmq" + err.Error())
+	}
+
 	db := database.GetDB()
 	r := router.Setup(db)
+
+	go events.MailVerificationEvent()
 
 	host := "localhost"
 

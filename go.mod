@@ -11,8 +11,12 @@ require (
 )
 
 require (
+	github.com/gocraft/work v0.5.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.0 // indirect
+	github.com/gomodule/redigo v1.8.9 // indirect
+	github.com/robfig/cron v1.2.0 // indirect
+	github.com/streadway/amqp v1.1.0 // indirect
 )
 
 require (
