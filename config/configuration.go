@@ -16,11 +16,16 @@ type Configuration struct {
 
 // Setup initialize configuration
 func Setup() error {
+	return SetupPath(".")
+}
+
+func SetupPath(path string) error {
+
 	var configuration *Configuration
 
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")
+	viper.AddConfigPath(path)
 
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file, %s", err)

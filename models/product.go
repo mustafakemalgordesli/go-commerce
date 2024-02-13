@@ -8,6 +8,7 @@ type Product struct {
 	Id          int       `json:"id"`
 	Name        string    `json:"name" validate:"required"`
 	Price       uint64    `json:"price" validate:"required"`
+	Quantity    int       `json:"quantity"`
 	Description string    `json:"description"`
 	ImageUrl    string    `json:"imageurl"`
 	CategoryId  int       `json:"categoryid"`
