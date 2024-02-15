@@ -37,5 +37,14 @@ func GetCategoryById(ctx context.Context, db *gorm.DB, id int) (*models.Category
 	if dbRes.Error != nil {
 		return nil, db.Error
 	}
-	return &category, dbRes.Error
+	return &category, nil
+}
+
+func GetCategoriesPagination(ctx context.Context, db *gorm.DB, pageNumber int, pageSize int) ([]models.Category, error) {
+	var categories []models.Category
+	dbRes := db.WithContext(ctx).Offset((pageNumber - 1) * pageSize).Limit(pageSize).Find(&categories)
+	if dbRes.Error != nil {
+		return nil, db.Error
+	}
+	return categories, nil
 }

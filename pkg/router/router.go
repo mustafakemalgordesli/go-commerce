@@ -32,5 +32,12 @@ func Setup(db *gorm.DB) *gin.Engine {
 		// authRouter.POST("/check", api.CheckToken)
 	}
 
+	categoryController := controllers.NewCategoryController(db)
+	categoryRouter := r.Group("/category")
+	{
+		categoryRouter.GET("/", categoryController.GetAllCategories)
+		categoryRouter.POST("/", categoryController.AddCategory)
+	}
+
 	return r
 }

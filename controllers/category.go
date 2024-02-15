@@ -22,7 +22,7 @@ func NewCategoryController(db *gorm.DB) *CategoryController {
 	}
 }
 
-func (categoryController CategoryController) Add(c *gin.Context) {
+func (categoryController CategoryController) AddCategory(c *gin.Context) {
 	var ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -60,6 +60,25 @@ func (categoryController CategoryController) Add(c *gin.Context) {
 
 	responseData := gin.H{
 
+		"success": true,
+	}
+
+	c.JSON(200, responseData)
+}
+
+func (categoryController CategoryController) GetAllCategories(c *gin.Context) {
+	var ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	categories, err := services.GetCategoriesPagination(ctx, categoryController.db, 1, 5)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"success": false})
+		return
+	}
+
+	responseData := gin.H{
+		"data":    categories,
 		"success": true,
 	}
 
