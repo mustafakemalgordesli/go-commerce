@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"errors"
 
 	"github.com/mustafakemalgordesli/go-commerce/models"
@@ -28,4 +29,13 @@ func GetAllCategories(db *gorm.DB) ([]models.Category, error) {
 		return []models.Category{}, dbRes.Error
 	}
 	return categories, nil
+}
+
+func GetCategoryById(ctx context.Context, db *gorm.DB, id int) (*models.Category, error) {
+	var category models.Category
+	dbRes := db.WithContext(ctx).Model(&models.Category{}).Where("id = ?", id).First(&category)
+	if dbRes.Error != nil {
+		return nil, db.Error
+	}
+	return &category, dbRes.Error
 }

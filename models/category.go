@@ -2,12 +2,9 @@ package models
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type Category struct {
-	gorm.Model
 	Id        int       `json:"id"`
 	Name      string    `json:"name" validate:"required"`
 	Priorty   int       `json:"priorty"`
