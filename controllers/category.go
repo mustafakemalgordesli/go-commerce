@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -70,7 +71,17 @@ func (categoryController CategoryController) GetAllCategories(c *gin.Context) {
 	var ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	categories, err := services.GetCategoriesPagination(ctx, categoryController.db, 1, 5)
+	number, err := strconv.Atoi(c.Query("number"))
+	if err != nil || number == 0 {
+		number = 1
+	}
+
+	size, err := strconv.Atoi(c.Query("size"))
+	if err != nil || number == 0 {
+		size = 8
+	}
+
+	categories, err := services.GetCategoriesPagination(ctx, categoryController.db, number, size)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"success": false})
