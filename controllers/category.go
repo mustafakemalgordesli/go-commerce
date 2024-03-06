@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -55,13 +54,9 @@ func (categoryController CategoryController) AddCategory(c *gin.Context) {
 
 	category := categoryRequest.ToModel()
 
-	fmt.Println(category.IsActive)
-
-	fmt.Println(category)
-
 	responseData := gin.H{
-
-		"success": true,
+		"category": category,
+		"success":  true,
 	}
 
 	c.JSON(200, responseData)

@@ -28,8 +28,6 @@ func Setup(db *gorm.DB) *gin.Engine {
 	{
 		authRouter.POST("/signup", authController.SignUp)
 		authRouter.POST("/signin", authController.SignIn)
-		// authRouter.POST("/refresh", api.RefreshToken)
-		// authRouter.POST("/check", api.CheckToken)
 	}
 
 	categoryController := controllers.NewCategoryController(db)
