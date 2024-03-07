@@ -64,5 +64,5 @@ func TestAddCategory(t *testing.T) {
 		assert.Equal(t, expectedCategory.Priorty, actualCategoriess[0].Priorty)
 	})
 
-	//clear(ctx, db)
+	clear(ctx, db)
 }

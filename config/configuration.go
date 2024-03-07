@@ -12,6 +12,7 @@ type Configuration struct {
 	Server   ServerConfiguration
 	Database DatabaseConfiguration
 	RabbitMq RabbitMqConfiguration
+	Redis    RedisConfiguration
 }
 
 // Setup initialize configuration

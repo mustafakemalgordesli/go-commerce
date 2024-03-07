@@ -11,6 +11,9 @@ rabbitmq:
   connection: "amqp://guest:guest@localhost:49154/"
   mailVerifiedQueue: "mail-verified-queue"
 
+redis:
+  connection: "redis://default:redispw@localhost:49153"
+
 server:
   host: "localhost"
   port: "3333"
