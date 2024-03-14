@@ -42,7 +42,7 @@ func Setup() error {
 		return err
 	}
 
-	db.AutoMigrate(&models.Category{}, &models.Product{}, &models.User{})
+	db.AutoMigrate(&models.Category{}, &models.Product{}, &models.User{}, &models.Cart{}, &models.CartItem{}, &models.Order{}, &models.OrderLines{})
 	DB = db
 
 	return nil
